@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  bot:
+    build: .
+    command: python bot.py
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  celery_worker:
+    build: .
+    command: celery -A tasks worker --loglevel=info
+    env_file:
+      - .env
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+volumes:
+  redis_data:

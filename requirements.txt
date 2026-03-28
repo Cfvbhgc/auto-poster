@@ -1,0 +1,6 @@
+aiogram>=3.3.0
+celery[redis]
+redis
+python-dotenv
+Pillow
+requests
